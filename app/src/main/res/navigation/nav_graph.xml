@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/eventListFragment"
-        android:name="com.example.sicreditest.FirstFragment"
+        android:name="com.example.sicreditest.EventListFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_event_list">
 
         <action
             android:id="@+id/action_view_event_detail"
@@ -21,9 +21,9 @@
     </fragment>
     <fragment
         android:id="@+id/eventDetailFragment"
-        android:name="com.example.sicreditest.SecondFragment"
+        android:name="com.example.sicreditest.EventDetailFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_event_detail">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"

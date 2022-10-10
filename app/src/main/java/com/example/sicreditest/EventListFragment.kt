@@ -12,18 +12,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sicreditest.databinding.FragmentFirstBinding
+import com.example.sicreditest.databinding.FragmentEventListBinding
+import com.example.sicreditest.feature.eventList.model.DetailEvent
 import com.example.sicreditest.feature.eventList.model.EventListState
-import com.example.sicreditest.feature.eventList.model.SicrediEvent
 import com.example.sicreditest.feature.eventList.view.ItemEventAdapter
 import com.example.sicreditest.feature.eventList.viewmodel.EventListViewModel
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class EventListFragment : Fragment() {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentEventListBinding? = null
     private lateinit var eventList: RecyclerView
     private var listAdapter: ItemEventAdapter? = null
     private val binding get() = _binding!!
@@ -34,7 +34,7 @@ class FirstFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentEventListBinding.inflate(inflater, container, false)
         setObservers()
         initComponents()
         viewModel.init()
@@ -53,7 +53,7 @@ class FirstFragment : Fragment() {
 
     private fun getSpanSize(): Int {
         return if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            3 else 2
+            SPAN_LAND else SPAN_PORTRAIT
     }
 
     private fun setObservers() {
@@ -72,12 +72,12 @@ class FirstFragment : Fragment() {
         })
     }
 
-    private fun setItemClickListener(event: SicrediEvent) {
+    private fun setItemClickListener(event: DetailEvent) {
         val bundle = createBundle(event)
         findNavController().navigate(R.id.action_view_event_detail, bundle)
     }
 
-    private fun createBundle(event: SicrediEvent): Bundle {
+    private fun createBundle(event: DetailEvent): Bundle {
 
         val bundle = Bundle()
         with(bundle) {
@@ -86,16 +86,13 @@ class FirstFragment : Fragment() {
         return bundle
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        /*binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }*/
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val SPAN_PORTRAIT = 2
+        private const val SPAN_LAND = 3
     }
 }

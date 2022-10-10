@@ -7,10 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sicreditest.R
-import com.example.sicreditest.feature.eventList.model.SicrediEvent
+import com.example.sicreditest.feature.eventList.model.DetailEvent
 import com.squareup.picasso.Picasso
 
-class ItemEventAdapter(private val events: List<SicrediEvent>, private val clickListener: (SicrediEvent) -> Unit) : RecyclerView.Adapter<ItemEventAdapter.ViewHolder>(){
+class ItemEventAdapter(private val events: List<DetailEvent>, private val clickListener: (DetailEvent) -> Unit) : RecyclerView.Adapter<ItemEventAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val item = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
@@ -27,14 +27,14 @@ class ItemEventAdapter(private val events: List<SicrediEvent>, private val click
         return events.size
     }
 
-    class ViewHolder(view: View, private val onItemClicked: (id: SicrediEvent) -> Unit) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val onItemClicked: (id: DetailEvent) -> Unit) : RecyclerView.ViewHolder(view) {
         val title: TextView
         val image: ImageView
         init {
             title = view.findViewById(R.id.title_event_item)
             image = view.findViewById(R.id.image_event_item)
         }
-        fun bind(event: SicrediEvent) {
+        fun bind(event: DetailEvent) {
             title.text = event.title
             val urlImage = event.imageUrl
             Picasso.get()

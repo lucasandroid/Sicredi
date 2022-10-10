@@ -1,26 +1,25 @@
 package com.example.sicreditest
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.sicreditest.databinding.FragmentSecondBinding
+import com.example.sicreditest.databinding.FragmentEventDetailBinding
+import com.example.sicreditest.feature.eventList.model.DetailEvent
 import com.example.sicreditest.feature.eventList.model.EventDetailState
-import com.example.sicreditest.feature.eventList.model.SicrediEvent
+import com.example.sicreditest.feature.eventList.util.StringUtils
+import com.example.sicreditest.feature.eventList.view.EventDetailBottomSheet
 import com.example.sicreditest.feature.eventList.viewmodel.EventDetailViewmodel
-import com.example.sicreditest.feature.eventList.viewmodel.EventListViewModel
 import com.squareup.picasso.Picasso
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class EventDetailFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentEventDetailBinding? = null
     private val viewModel: EventDetailViewmodel by viewModels {EventDetailViewmodel.Factory}
 
     // This property is only valid between onCreateView and
@@ -31,7 +30,7 @@ class SecondFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentEventDetailBinding.inflate(inflater, container, false)
         arguments?.let {
             viewModel.init(it)
         }
@@ -49,10 +48,32 @@ class SecondFragment : Fragment() {
         }
     }
 
-    private fun setComponents(eventData: SicrediEvent) {
-        getImageEvent(eventData.imageUrl)
+    private fun setComponents(eventData: DetailEvent) {
+        eventData.imageUrl?.let { getImageEvent(it) }
         binding.eventTitleDetail.text = eventData.title
         binding.eventDescriptionDetail.text = eventData.description
+        //binding.eventDateDetail.text = getString(R.string.event_date, eventData.date)
+        eventData.price?.let {
+            binding.eventPriceDetail.text = getString(
+                R.string.event_price, StringUtils.convertToCurrency(it)
+            )
+        }
+        binding.eventShareDetail.setOnClickListener { 
+            shareEvent(eventData)
+        }
+        binding.eventCheckinDetail.setOnClickListener { 
+            showCheckinEvent(eventData)
+        }
+    }
+
+    private fun showCheckinEvent(eventData: DetailEvent) {
+        eventData.id?.let {
+            EventDetailBottomSheet(it).show(parentFragmentManager, EventDetailBottomSheet.TAG)
+        }
+    }
+
+    private fun shareEvent(eventData: DetailEvent) {
+
     }
 
     private fun getImageEvent(imageUrl: String) {
@@ -60,14 +81,6 @@ class SecondFragment : Fragment() {
             .load(imageUrl)
             .placeholder(R.mipmap.sicredi)
             .into(binding.imageEventDetail)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        /*binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }*/
     }
 
     override fun onDestroyView() {

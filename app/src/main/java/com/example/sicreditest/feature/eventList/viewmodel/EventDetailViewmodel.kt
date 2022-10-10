@@ -6,8 +6,8 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.sicreditest.feature.eventList.datasource.EventSource
 import com.example.sicreditest.feature.eventList.datasource.Rest
+import com.example.sicreditest.feature.eventList.model.DetailEvent
 import com.example.sicreditest.feature.eventList.model.EventDetailState
-import com.example.sicreditest.feature.eventList.model.SicrediEvent
 import kotlinx.coroutines.launch
 
 class EventDetailViewmodel(private val repository: EventSource): ViewModel() {
@@ -15,7 +15,7 @@ class EventDetailViewmodel(private val repository: EventSource): ViewModel() {
     private val eventDetail: MutableLiveData<EventDetailState> = MutableLiveData()
     val eventDetailLiveData: LiveData<EventDetailState> = eventDetail
 
-    fun getEventDetail(idEvent: Int) {
+    /*fun getEventDetail(idEvent: Int) {
 
         viewModelScope.launch {
             try {
@@ -26,13 +26,13 @@ class EventDetailViewmodel(private val repository: EventSource): ViewModel() {
             }
         }
 
-    }
+    }*/
 
     fun init(bundle: Bundle) {
         val event = if (Build.VERSION.SDK_INT >= 33) {
-            bundle.getSerializable("event", SicrediEvent::class.java)
+            bundle.getSerializable("event", DetailEvent::class.java)
         } else {
-            bundle.getSerializable("event") as SicrediEvent
+            bundle.getSerializable("event") as DetailEvent
         }
 
         event?.let {

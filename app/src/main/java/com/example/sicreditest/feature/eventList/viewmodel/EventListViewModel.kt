@@ -5,10 +5,10 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.sicreditest.feature.eventList.datasource.EventSource
 import com.example.sicreditest.feature.eventList.datasource.Rest
 import com.example.sicreditest.feature.eventList.model.EventListState
-import com.example.sicreditest.feature.eventList.model.SicrediEvent
+import com.example.sicreditest.feature.eventList.mapper.SicrediEventMapper
 import kotlinx.coroutines.launch
 
-class EventListViewModel(private val repository: EventSource): ViewModel() {
+class EventListViewModel(private val repository: EventSource, private val mapper: SicrediEventMapper): ViewModel() {
 
     private var eventList : MutableLiveData<EventListState> = MutableLiveData()
     val eventListLiveData: LiveData<EventListState> = eventList
@@ -17,8 +17,9 @@ class EventListViewModel(private val repository: EventSource): ViewModel() {
 
         viewModelScope.launch {
             try {
-                val list = repository.getList()
-                eventList.value = EventListState.EventListSuccess(list)
+                val response = repository.getList()
+                val detailList = mapper.parseEventListResponseToDetailList(response)
+                eventList.value = EventListState.EventListSuccess(detailList)
             } catch (e: Exception) {
                 eventList.value = EventListState.EventListError(e.message ?: "")
             }
@@ -34,7 +35,8 @@ class EventListViewModel(private val repository: EventSource): ViewModel() {
                 modelClass: Class<T>,
                 extras: CreationExtras
             ): T {
-                return EventListViewModel(Rest.service.create(EventSource::class.java) ) as T
+                val mapper = SicrediEventMapper()
+                return EventListViewModel(Rest.service.create(EventSource::class.java), mapper) as T
             }
         }
     }
