@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Sicredi Test</string>
+    <string name="first_fragment_label">Lista de Eventos</string>
+    <string name="second_fragment_label">Detalhes do Evento</string>
+    <string name="event_date">Data: %1$s</string>
+    <string name="event_price">Preço: %1$s</string>
+    <string name="confirm_checkin_button">Confirmar</string>
+    <string name="checkin_name">Nome</string>
+    <string name="checkin_email">E-mail</string>
+    <string name="checkin_success">Checkin feito com sucesso</string>
+    <string name="checkin_error">Erro ao efetuar login. Tente em alguns minutos</string>
+    <string name="load_list_error">Erro ao carregar os eventos. verifique sua conexão com a internet e tente novamente</string>
+</resources>
