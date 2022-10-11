@@ -1,0 +1,10 @@
+# Ignore Mac system files
+.DS_store
+
+.gradle
+.idea/*
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
