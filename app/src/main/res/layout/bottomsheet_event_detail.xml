@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
         android:id="@+id/checkin_bottomsheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/checkin_fields"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="30dp">
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            >
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/text_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nome"
+                android:hint="@string/checkin_name"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -27,6 +33,7 @@
                     android:id="@+id/name_checkin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -35,8 +42,8 @@
                 android:id="@+id/text_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="E-mail"
-                android:layout_marginTop="10dp"
+                android:hint="@string/checkin_email"
+                android:layout_marginTop="@dimen/default_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_name"
@@ -46,21 +53,65 @@
                     android:id="@+id/email_checkin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <ProgressBar
+                android:id="@+id/checkin_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toLeftOf="@+id/checkin_confirmar"
+                app:layout_constraintTop_toTopOf="@+id/checkin_confirmar"
+                android:layout_marginEnd="40dp"
+                android:visibility="invisible"
+                />
             <Button
                 android:id="@+id/checkin_confirmar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirmar"
-                android:layout_marginTop="40dp"
+                android:text="@string/confirm_checkin_button"
+                android:layout_marginTop="@dimen/default_margin"
+                android:enabled="false"
                 app:layout_constraintTop_toBottomOf="@+id/text_email"
                 app:layout_constraintRight_toRightOf="parent"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
                 />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/checkin_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:animateLayoutChanges="true"
+            android:visibility="gone"
+            tools:visibility="visible"
+            >
+
+            <ImageView
+                android:id="@+id/checkin_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:src="@drawable/ic_success"
+                />
+
+            <TextView
+                android:id="@+id/checkin_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                tools:text="xxxxxxxxxxxxxxxxxxxx"
+                />
+
+        </LinearLayout>
+
     </FrameLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.sicreditest
+package com.example.sicreditest.feature.eventList.view.fragment
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sicreditest.R
 import com.example.sicreditest.databinding.FragmentEventListBinding
 import com.example.sicreditest.feature.eventList.model.DetailEvent
-import com.example.sicreditest.feature.eventList.model.EventListState
+import com.example.sicreditest.feature.eventList.viewmodel.state.EventListState
 import com.example.sicreditest.feature.eventList.view.ItemEventAdapter
 import com.example.sicreditest.feature.eventList.viewmodel.EventListViewModel
 
@@ -57,19 +57,31 @@ class EventListFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewModel.eventListLiveData.observe(viewLifecycleOwner, Observer { event ->
-            when(event) {
+        viewModel.eventListLiveData.observe(viewLifecycleOwner) { event ->
+            when (event) {
                 is EventListState.EventListSuccess -> {
-                    listAdapter = ItemEventAdapter(event.list){
+                    binding.eventListError.visibility = View.GONE
+                    listAdapter = ItemEventAdapter(event.list) {
                         setItemClickListener(it)
                     }
                     eventList.adapter = listAdapter
                 }
                 is EventListState.EventListError -> {
-                    event.error
+                    showError()
                 }
             }
-        })
+        }
+
+        viewModel.listLoading.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is EventListState.HideLoading -> {
+                    binding.listLoading.visibility = View.GONE
+                }
+                is EventListState.ShowLoading -> {
+                    binding.listLoading.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun setItemClickListener(event: DetailEvent) {
@@ -89,6 +101,11 @@ class EventListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showError() {
+        binding.eventListError.visibility = View.VISIBLE
+        binding.eventListError.text = getString(R.string.load_list_error)
     }
 
     companion object {

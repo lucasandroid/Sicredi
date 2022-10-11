@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.sicreditest.feature.eventList.datasource.EventSource
 import com.example.sicreditest.feature.eventList.datasource.Rest
-import com.example.sicreditest.feature.eventList.model.EventListState
+import com.example.sicreditest.feature.eventList.viewmodel.state.EventListState
 import com.example.sicreditest.feature.eventList.mapper.SicrediEventMapper
 import kotlinx.coroutines.launch
 
@@ -13,18 +13,22 @@ class EventListViewModel(private val repository: EventSource, private val mapper
     private var eventList : MutableLiveData<EventListState> = MutableLiveData()
     val eventListLiveData: LiveData<EventListState> = eventList
 
-    fun init() {
+    private val _listLoad: MutableLiveData<EventListState> = MutableLiveData()
+    val listLoading: LiveData<EventListState> = _listLoad
 
+    fun init() {
+        _listLoad.value = EventListState.ShowLoading()
         viewModelScope.launch {
             try {
                 val response = repository.getList()
                 val detailList = mapper.parseEventListResponseToDetailList(response)
                 eventList.value = EventListState.EventListSuccess(detailList)
             } catch (e: Exception) {
-                eventList.value = EventListState.EventListError(e.message ?: "")
+                eventList.value = EventListState.EventListError()
+            } finally {
+                _listLoad.value = EventListState.HideLoading()
             }
         }
-
     }
 
     companion object {

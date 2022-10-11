@@ -1,15 +1,16 @@
-package com.example.sicreditest
+package com.example.sicreditest.feature.eventList.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.example.sicreditest.R
 import com.example.sicreditest.databinding.FragmentEventDetailBinding
 import com.example.sicreditest.feature.eventList.model.DetailEvent
-import com.example.sicreditest.feature.eventList.model.EventDetailState
-import com.example.sicreditest.feature.eventList.util.StringUtils
+import com.example.sicreditest.feature.eventList.viewmodel.state.EventDetailState
 import com.example.sicreditest.feature.eventList.view.EventDetailBottomSheet
 import com.example.sicreditest.feature.eventList.viewmodel.EventDetailViewmodel
 import com.squareup.picasso.Picasso
@@ -20,10 +21,7 @@ import com.squareup.picasso.Picasso
 class EventDetailFragment : Fragment() {
 
     private var _binding: FragmentEventDetailBinding? = null
-    private val viewModel: EventDetailViewmodel by viewModels {EventDetailViewmodel.Factory}
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private val viewModel: EventDetailViewmodel by viewModels()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,11 +29,15 @@ class EventDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentEventDetailBinding.inflate(inflater, container, false)
+        initViewModel()
+        initObservers()
+        return binding.root
+    }
+
+    private fun initViewModel() {
         arguments?.let {
             viewModel.init(it)
         }
-        initObservers()
-        return binding.root
     }
 
     private fun initObservers() {
@@ -51,11 +53,14 @@ class EventDetailFragment : Fragment() {
     private fun setComponents(eventData: DetailEvent) {
         eventData.imageUrl?.let { getImageEvent(it) }
         binding.eventTitleDetail.text = eventData.title
+        eventData.date?.let {
+            binding.eventDateDetail.text = getString(R.string.event_date, it)
+        }
+
         binding.eventDescriptionDetail.text = eventData.description
-        //binding.eventDateDetail.text = getString(R.string.event_date, eventData.date)
         eventData.price?.let {
             binding.eventPriceDetail.text = getString(
-                R.string.event_price, StringUtils.convertToCurrency(it)
+                R.string.event_price, it
             )
         }
         binding.eventShareDetail.setOnClickListener { 
@@ -73,7 +78,15 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun shareEvent(eventData: DetailEvent) {
+        val share = Intent.createChooser(Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, eventData.description)
+            putExtra(Intent.EXTRA_TITLE, eventData.title)
+            putExtra(Intent.EXTRA_SUBJECT, eventData.title)
+            type = "text/plain"
 
+        }, null)
+        startActivity(share)
     }
 
     private fun getImageEvent(imageUrl: String) {

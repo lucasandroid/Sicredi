@@ -28,8 +28,8 @@ class ItemEventAdapter(private val events: List<DetailEvent>, private val clickL
     }
 
     class ViewHolder(view: View, private val onItemClicked: (id: DetailEvent) -> Unit) : RecyclerView.ViewHolder(view) {
-        val title: TextView
-        val image: ImageView
+        private val title: TextView
+        private val image: ImageView
         init {
             title = view.findViewById(R.id.title_event_item)
             image = view.findViewById(R.id.image_event_item)
