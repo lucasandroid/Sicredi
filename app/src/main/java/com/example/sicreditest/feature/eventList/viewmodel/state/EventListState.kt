@@ -5,7 +5,7 @@ import com.example.sicreditest.feature.eventList.model.DetailEvent
 open class EventListState {
 
     class EventListSuccess(val list : List<DetailEvent>) : EventListState()
-    class EventListError(): EventListState()
+    class EventListError: EventListState()
     class ShowLoading: EventListState()
     class HideLoading: EventListState()
 }

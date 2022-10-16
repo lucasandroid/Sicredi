@@ -16,8 +16,6 @@ data class SicrediEvent(
     val latitude: Double,
     @SerializedName("longitude")
     val longitude: Double,
-    @SerializedName("people")
-    val people: List<Any>,
     @SerializedName("price")
     val price: Double,
     @SerializedName("title")
